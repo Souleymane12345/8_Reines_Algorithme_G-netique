@@ -2,55 +2,47 @@
 ############## DABONE SOULEYMANE #####################
 
 import random
-from math import *
-from fonction import genererPopulation
+from random import randrange
+from fonction import permutation
 from fonction import conflits
 from fonction import minimum
-from fonction import selectionNaturel
-from fonction import generationEnfant
-
-
-
-
-
 
 
 def principal_function (s):
+    
+    sVoisin = permutation(s)
 
-    population = []
-    meilleursIndividus = []
-    nouvelleGeneration = []
-    population = genererPopulation(s)
-    print("La taille de la population initiale est :",len(population))
-    k=0
-    while conflits(s) != 0  and k<25:
-        
-        k+=1
-        meilleursIndividus = selectionNaturel(population)
-        print(f"La liste des meilleurs individus de la {k} ième génération est : {meilleursIndividus} de taille {len(meilleursIndividus)}")
-        nouvelleGeneration = generationEnfant(meilleursIndividus)
-        print(f"La liste de la population à la  {k} ième génération est : {nouvelleGeneration} de taille {len(meilleursIndividus)} ")
-        s = minimum(nouvelleGeneration)
-        print(f"Le meilleur du  individu de la population à la  {k} ième génération est : {s} avec un conflit valant : {conflits(s)}")
-        population.clear()
-        population = nouvelleGeneration
-
+    sCandidate = minimum(sVoisin)
+    
+    if conflits(sCandidate) <= conflits(s):
+        #print("okkkkkkkkkk")
+        resultat_final = sCandidate
+    
        
-    return s,k
+    if   s == resultat_final :
+        return resultat_final
+    else:
+        print(" Utilisons une nouvelle liste : {}" .format(resultat_final),"avec un conflit  valant : {}".format(conflits(resultat_final)))
+        #print("okkkkkkkkkkk")
+        resultat_final = principal_function(resultat_final)
         
-            
+        return resultat_final
+    
+        
         
 
 def generer_liste ():
-    randomlist = random.sample(range(1, 9), 8)
+    #randomlist = random.sample(range(1, 9), 8)
+   
+    randomlist = [randrange(10) for i in range(8)]
     return randomlist
 
 
-table = generer_liste()
+#table = generer_liste()
+table = [7, 4, 2, 3, 1, 5, 6, 8]
 
-""""""
-print(f"Notre liste de départ est : {table} avec un conflit  valant : {conflits(table)}")
+print(" Notre liste de départ est : {}" .format(table),"avec un conflit  valant : {}".format(conflits(table)))
 
-resultat_finals, generation = principal_function(table)
+resultat_finals = principal_function(table)
 
-print(f"Notre liste de final est : {resultat_finals} avec un conflit  valant : {conflits(resultat_finals)}. Elle est trouvée à la {generation} ième génération.")
+print(" Notre liste de final est : {}" .format(resultat_finals),"avec un conflit  valant : {}".format(conflits(resultat_finals)))
